@@ -1,0 +1,54 @@
+<html>
+    <head>
+      <title>Обо мне</title>
+    </head>
+    <body>
+        {% include 'next.html' %}
+        <h1> {{name}}</h1>
+        <h1> {{age}}</h1>
+        <h1> {{message_to_you}}</h1>
+        <h2> {{10 / 3}}</h2> 
+        <h2> {{("c", "c++", "c#")[2]}}</h2>
+        <h2> 
+        {% set user = "dima" %}   
+        {% if user == "oleg" %}
+        <p>кароче, это по дефолту поведение</p>
+        {% elif user == "dima" %}
+        <p> а вот тут юзверь уже дима</p>
+        {% else %}
+        <p> ноунейм залогинился</p>
+        {% endif %}
+        </h2>
+        <h2> 
+            {% set user_list = ['tom', 'jerry', 'spike'] %}
+            {% for user1 in user_list %}
+            <p>{{ user1 }}</p>
+            {% endfor %}
+        </h2>
+        <h3>
+            {% set flask_to_filter = "jinja made first letters capitalized" %}
+            {% set html_to_escape = "<h1> BIG LETTERS <h1>" %}
+            {{ flask_to_filter|title }}
+            {{ html_to_escape|safe }}
+            {{ html_to_escape }}
+        </h3> 
+        <h3>Not escaped with autoescape</h3>
+        <h3>
+            {% autoescape false %}
+                {% set html_1 = "<h6>small letters</h6>" %}
+                {% set html_2 = "<h1> BIG LETTERS <h1>" %}
+                {{ html_1 }}
+                {{ html_2 }}
+            {% endautoescape %}
+        </h3>
+        <h3>Escaped with autoescape</h3>
+        <h3>
+            {% autoescape true %}
+                {% set html_1 = "<h6>small letters</h6>" %}
+                {% set html_2 = "<h1> BIG LETTERS <h1>" %}
+                {{ html_1 }}
+                {{ html_2 }}
+            {% endautoescape %}
+        </h3>
+    </body>
+</html>
