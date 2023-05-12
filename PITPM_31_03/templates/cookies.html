@@ -1,0 +1,54 @@
+<html lang="ru">
+<header>
+    <meta charset="UTF-8">
+    <title> Страничка с куки</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Foldit:wght@100&family=PT+Mono&family=Roboto:wght@100&display=swap" rel="stylesheet">
+     
+</header>
+<body>
+    {% set font_typename = request.cookies.get('font_type') %}
+    {% if font_typename == "cursive" %}
+    <style type="text/css">
+        body {  
+            font-family: 'Roboto', sans-serif; 
+        } 
+    </style>
+    {% elif font_typename == "serif" %}
+    <style type="text/css">
+        body { 
+            font-family: 'Foldit', cursive; 
+        } 
+    </style>
+    {% elif font_typename == "fantasy" %}
+    <style type="text/css">
+        body { 
+            font-family: 'PT Mono', monospace;
+        } 
+    </style>
+    {% else %}
+    <p>No font</p>
+    {% endif%}
+     
+
+    <br>
+    Выберите предпочитаемый шрифт 
+    </br>
+    <form action="/set_font" method="POST">
+        <select name="font_type_selection" onchange="submit()">
+        <option value="no_font">no_font</option>
+        <option value="cursive">cursive</option>
+        <option value="serif">serif</option>
+        <option value="fantasy">fantasy</option>
+        </select> 
+    </form>
+    <p>
+        Текст, шрифт которого должен измениться
+    </p>
+
+
+</body>
+
+
+</html>

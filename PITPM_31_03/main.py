@@ -1,7 +1,7 @@
-from flask import Flask, make_response, abort, render_template, url_for
+from flask import Flask, make_response, abort, render_template, url_for, request, redirect, session
 
 api = Flask(__name__, template_folder = "templates")
-
+api.secret_key = "ultra_secret"
 @api.route('/')
 def index():
     return 'Hello World'
@@ -63,12 +63,55 @@ def show_template():
 
 @api.route("/geturl")
 def url_get():
-    return url_for(books, genre = "romance")
+    return redirect(url_for('books', genre = 'romance'))
 
+# lesson 12, cookie
 
+@api.route("/set_name_cookie")
+def cookie():
+    res = make_response("Set name cookie")
+    res.set_cookie('name', 'oleg', max_age=60*60*24)
+    return res
 
+@api.route("/set_font", methods = ['GET', 'POST'])
+def font_cookie():
+     response = make_response(render_template('cookies.html'))
+     if (request.method == 'POST'):
+        font = request.form.get('font_type_selection')
+        response.set_cookie('font_type', font)
+        
+     return response
+#lesson 13 sessions
+visit = 'visitcount'
+@api.route("/view_count")
+def count_views():
+    if visit in session:
+        session[visit] = session[visit] + 1
+    else:
+        session[visit] = 1
+    return "Число промотров этой страницы: {}".format(session[visit])
+@api.route('/clear_session')
+def clear_session():
+    session.pop(visit, None)
+    return 'Session data cleared'
+
+@api.route('/update_session')
+def update_session():
+    offset = 0
+    if visit in session:
+        offset = session[visit]
+    items_key = 'items'
+    items = {'яблоко' : 0, 'манго': 0, 'киви': 0} 
+    if items_key in session:
+        items_stored = session[items_key]
+        for key in items_stored:
+            items_stored[key]+=offset
+        session[items_key] = items_stored
+    else:
+        session[items_key] = items
+    return str(session[items_key])
+    
+     
 if __name__ == "__main__":
     api.run()
-
-
 
